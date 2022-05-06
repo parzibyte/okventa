@@ -67,7 +67,7 @@ function dibuja_tabla_bajas_inventario(datos){
 					.html('Razón de baja'),
 					
 					$( "<th>" )
-					.html('Usario'),
+					.html('Usuario'),
 					
 					$( "<th>" )
 					.html('Fecha')
