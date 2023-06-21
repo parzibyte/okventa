@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . '/ticket/autoload.php';
+require __DIR__ . '/ticket/vendor/autoload.php';
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\EscposImage;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
