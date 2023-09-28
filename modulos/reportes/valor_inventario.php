@@ -13,7 +13,7 @@ if ($_SESSION["administrador"] !== 1) {
     echo json_encode("Restringido");
     exit();
 }
-$payload=json_decode(file_get_contents("php://input"));
+$payload = json_decode(file_get_contents("php://input"));
 $filtro = $payload->filtro;
 $orden = $payload->orden;
 $valor_del_inventario = consultar_valor_del_inventario();
@@ -39,7 +39,9 @@ foreach ($encabezados as $encabezado) {
 }
 $fila++;
 $propiedades = ["codigo", "nombre", "precio_compra", "precio_venta", "utilidad", "existencia", "familia"];
-foreach ($todos_los_productos as $producto) {
+
+for ($x = count($todos_los_productos) - 1; $x >= 0; $x--) {
+    $producto = $todos_los_productos[$x];
     $columna = 1;
     foreach ($propiedades as $propiedad) {
         $hoja->setCellValue([$columna, $fila], $producto[$propiedad]);

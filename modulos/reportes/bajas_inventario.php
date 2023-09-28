@@ -31,7 +31,8 @@ foreach ($encabezados as $encabezado) {
 }
 $fila++;
 $propiedades = ["codigo_producto", "nombre_producto", "numero_piezas", "razon_baja", "usuario", "fecha"];
-foreach ($todas_las_bajas as $valor) {
+for ($x = count($todas_las_bajas) - 1; $x >= 0; $x--) {
+    $valor = $todas_las_bajas[$x];
     $columna = 1;
     foreach ($propiedades as $propiedad) {
         $hoja->setCellValue([$columna, $fila], $valor[$propiedad]);
