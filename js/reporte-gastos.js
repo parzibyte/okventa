@@ -24,6 +24,26 @@ function escuchar_elementos(){
 	$("#generar_reporte").click(function(){
 		window.print();
 	});
+
+	$("#generar_reporte_excel").click(async function () {
+		const url = `./modulos/reportes/gastos.php`;
+		const payload = {
+			fecha_inicio: $("#fecha_inicio").val(),
+			fecha_fin: $("#fecha_fin").val(),
+		};
+		const respuesta = await fetch(url, {
+			method: "POST",
+			credentials: 'include',
+			body: JSON.stringify(payload),
+		});
+		const contenidoDelArchivo = await respuesta.blob();
+		const a = document.createElement("a");
+		const objectUrl = URL.createObjectURL(contenidoDelArchivo);
+		a.href = objectUrl;
+		a.download = "Reporte gastos.xlsx";
+		a.click();
+		URL.revokeObjectURL(url);
+	});
 }
 
 function dibuja_tabla_caja(datos){
