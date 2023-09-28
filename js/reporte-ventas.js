@@ -122,6 +122,27 @@ function escuchar_elementos() {
     $("#generar_reporte").click(function () {
         window.print();
     });
+
+    $("#generar_reporte_excel").click(async function () {
+        const url = `./modulos/reportes/ventas.php`;
+        const payload = {
+            fecha_inicio: $("#fecha_inicio").val(),
+            fecha_fin: $("#fecha_fin").val(),
+            familia: $("#familia").val(),
+        };
+        const respuesta = await fetch(url, {
+            method: "POST",
+            credentials: 'include',
+            body: JSON.stringify(payload),
+        });
+        const contenidoDelArchivo = await respuesta.blob();
+        const a = document.createElement("a");
+        const objectUrl = URL.createObjectURL(contenidoDelArchivo);
+        a.href = objectUrl;
+        a.download = "Reporte de ventas.xlsx";
+        a.click();
+        URL.revokeObjectURL(url);
+    });
 }
 function llena_select_familias(familias) {
     var $contenedorFamilia = $("#familia");
@@ -164,25 +185,25 @@ function dibuja_tabla_ventas_por_familia(ventas) {
         utilidad_por_familia = 0.0;
     $contenedorReportePorFamilia.empty();
     ventas.forEach(function (a) {
-            total_por_familia += parseFloat(a.total);
-            utilidad_por_familia += parseFloat(a.utilidad);
-            $contenedorReportePorFamilia
-                .append(
-                    '<tr>' +
-                    '<td>' +
-                    (a.familia === "" ? "--Sin familia--" : a.familia) +
-                    '</td>' +
-                    '<td> $' +
-                    a.total +
-                    '</td>' +
-                    '<td>' +
-                    '<strong>$' +
-                    a.utilidad +
-                    '</strong>' +
-                    '</td>' +
-                    '</tr>'
-                );
-        }
+        total_por_familia += parseFloat(a.total);
+        utilidad_por_familia += parseFloat(a.utilidad);
+        $contenedorReportePorFamilia
+            .append(
+                '<tr>' +
+                '<td>' +
+                (a.familia === "" ? "--Sin familia--" : a.familia) +
+                '</td>' +
+                '<td> $' +
+                a.total +
+                '</td>' +
+                '<td>' +
+                '<strong>$' +
+                a.utilidad +
+                '</strong>' +
+                '</td>' +
+                '</tr>'
+            );
+    }
     );
     $contenedorReportePorFamilia
         .append(
