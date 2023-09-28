@@ -1,5 +1,4 @@
 <?php
-#Definimos la raíz del directorio
 if (!defined("RAIZ")) define("RAIZ", dirname(dirname(dirname(__FILE__))));
 require_once RAIZ . "/modulos/db.php";
 require_once RAIZ . "/modulos/funciones.php";
@@ -14,21 +13,19 @@ if ($_SESSION["administrador"] !== 1) {
     echo json_encode("Restringido");
     exit();
 }
-$filtro = $_POST["filtro"];
-$orden = $_POST["orden"];
+$payload=json_decode(file_get_contents("php://input"));
+$filtro = $payload->filtro;
+$orden = $payload->orden;
 $valor_del_inventario = consultar_valor_del_inventario();
 $todos_los_productos = consultar_todos_los_productos_reportes($filtro, $orden);
 $documento = new Spreadsheet();
 $documento
     ->getProperties()
     ->setTitle('Reporte valor inventario');
-
-$writer = new Xlsx($documento);
 $hoja = $documento->getActiveSheet();
 $fila = 1;
 $columna = 1;
-#$valores = ["Total de productos", count($todos_los_productos), "Valor del inventario", $valor_del_inventario];
-$valores = ["Total de productos", 1, "Valor del inventario", $valor_del_inventario];
+$valores = ["Total de productos", count($todos_los_productos), "Valor del inventario", $valor_del_inventario];
 foreach ($valores as $valor) {
     $hoja->setCellValue([$columna, $fila], $valor);
     $columna++;
@@ -50,4 +47,11 @@ foreach ($todos_los_productos as $producto) {
     }
     $fila++;
 }
-$writer->save(sprintf('otro_%s_%s.xlsx',$filtro,$orden));
+ob_clean();
+header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+$nombreDelDocumento = "reporte.xlsx";
+header('Content-Disposition: attachment;filename="' . $nombreDelDocumento . '"');
+header('Cache-Control: max-age=0');
+$writer = new Xlsx($documento);
+$writer->save('php://output');
+exit;

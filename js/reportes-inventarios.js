@@ -37,16 +37,25 @@ function escuchar_elementos() {
         window.print();
     });
 
-    $("#generar_reporte_excel").click(function () {
+    $("#generar_reporte_excel").click(async function () {
         const url = `./modulos/reportes/valor_inventario.php`;
         const payload = {
             limite: limite,
             orden: orden,
             filtro: filtro
         };
-        $.post(url, payload, (respuesta) => {
-            console.log({ respuesta });
+        const respuesta = await fetch(url, {
+            method: "POST",
+            credentials: 'include',
+            body: JSON.stringify(payload),
         });
+        const contenidoDelArchivo = await respuesta.blob();
+        const a = document.createElement("a");
+        const objectUrl = URL.createObjectURL(contenidoDelArchivo);
+        a.href = objectUrl;
+        a.download = "Reporte valor de inventario.xlsx";
+        a.click();
+        URL.revokeObjectURL(url);
     });
 
     $("#orden").change(function (event) {

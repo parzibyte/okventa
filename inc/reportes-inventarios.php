@@ -50,7 +50,7 @@ if (!isset($_SESSION)) exit("<script>window.location.href = '../';</script>");
     </div>
 </div>
 <div class="row hidden-print">
-    <div class="col-xs-6">
+    <div class="col-xs-12">
         <button class="btn btn-info " id="generar_reporte">Generar reporte <i class="fa fa-file-pdf-o"></i>
         </button>
 
