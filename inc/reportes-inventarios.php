@@ -50,9 +50,14 @@ if (!isset($_SESSION)) exit("<script>window.location.href = '../';</script>");
     </div>
 </div>
 <div class="row hidden-print">
-    <div class="col-xs-12">
-        <button class="btn btn-info form-control" id="generar_reporte">Generar reporte <i class="fa fa-file-pdf-o"></i>
+    <div class="col-xs-6">
+        <button class="btn btn-info " id="generar_reporte">Generar reporte <i class="fa fa-file-pdf-o"></i>
         </button>
+
+        <button class="btn btn-info " id="generar_reporte_excel">Generar Excel <i class="fa fa-file-excel-o"></i>
+        </button>
+    </div>
+    <div class="col-xs-6">
     </div>
 </div>
 <div class="row"><br>

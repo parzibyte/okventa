@@ -37,6 +37,18 @@ function escuchar_elementos() {
         window.print();
     });
 
+    $("#generar_reporte_excel").click(function () {
+        const url = `./modulos/reportes/valor_inventario.php`;
+        const payload = {
+            limite: limite,
+            orden: orden,
+            filtro: filtro
+        };
+        $.post(url, payload, (respuesta) => {
+            console.log({ respuesta });
+        });
+    });
+
     $("#orden").change(function (event) {
         orden = $(this).val();
         consulta_todos_los_productos();
