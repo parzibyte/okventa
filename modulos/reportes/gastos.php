@@ -37,6 +37,9 @@ for ($x = count($todos_los_gastos) - 1; $x >= 0; $x--) {
     $columna = 1;
     $total += $valor["importe"];
     foreach ($propiedades as $propiedad) {
+        if (in_array($propiedad, ["importe"])) {
+            $hoja->getStyle([$columna, $fila])->getNumberFormat()->setFormatCode('[$S/]* #,##0.00_-;[Red][$S/]* -#,##0.00_-;[$S/]* "-"??_-;_-@_-');
+        }
         $hoja->setCellValue([$columna, $fila], $valor[$propiedad]);
         $columna++;
     }
@@ -46,6 +49,7 @@ $columna = 1;
 $hoja->setCellValue([$columna, $fila], "Total");
 $columna++;
 $hoja->setCellValue([$columna, $fila], $total);
+$hoja->getStyle([$columna, $fila])->getNumberFormat()->setFormatCode('[$S/]* #,##0.00_-;[Red][$S/]* -#,##0.00_-;[$S/]* "-"??_-;_-@_-');
 ob_clean();
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 $nombreDelDocumento = "reporte.xlsx";

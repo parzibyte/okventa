@@ -6,6 +6,7 @@ require_once RAIZ . "/modulos/inventario/inventario.php";
 require RAIZ . "/vendor/autoload.php";
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 inicia_sesion_segura();
@@ -30,6 +31,8 @@ foreach ($valores as $valor) {
     $hoja->setCellValue([$columna, $fila], $valor);
     $columna++;
 }
+
+$hoja->getStyle([4, 1])->getNumberFormat()->setFormatCode('[$S/]* #,##0.00_-;[Red][$S/]* -#,##0.00_-;[$S/]* "-"??_-;_-@_-');
 $fila++;
 $encabezados = ["Código", "Nombre", "Precio de compra", "Precio de venta", "Utilidad", "Cantidad", "Familia"];
 $columna = 1;
@@ -45,6 +48,9 @@ for ($x = count($todos_los_productos) - 1; $x >= 0; $x--) {
     $columna = 1;
     foreach ($propiedades as $propiedad) {
         $hoja->setCellValue([$columna, $fila], $producto[$propiedad]);
+        if (in_array($propiedad, ["precio_compra", "precio_venta", "utilidad"])) {
+            $hoja->getStyle([$columna, $fila])->getNumberFormat()->setFormatCode('[$S/]* #,##0.00_-;[Red][$S/]* -#,##0.00_-;[$S/]* "-"??_-;_-@_-');
+        }
         $columna++;
     }
     $fila++;

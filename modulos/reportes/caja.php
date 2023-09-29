@@ -40,16 +40,19 @@ for ($x = count($movimientos_caja) - 1; $x >= 0; $x--) {
     $valor = $movimientos_caja[$x];
     $columna = 1;
     $hoja->setCellValue([$columna, $fila], $valor["caja_chica"] == 0 ? "No aplica" : $valor["caja_chica"]);
+    $hoja->getStyle([$columna, $fila])->getNumberFormat()->setFormatCode('[$S/]* #,##0.00_-;[Red][$S/]* -#,##0.00_-;[$S/]* "-"??_-;_-@_-');
     if ($valor["caja_chica"] != 0) {
         $total_caja_chica += $valor["caja_chica"];
     }
     $columna++;
     $hoja->setCellValue([$columna, $fila], $valor["ventas"] == 0 ? "No aplica" : $valor["ventas"]);
+    $hoja->getStyle([$columna, $fila])->getNumberFormat()->setFormatCode('[$S/]* #,##0.00_-;[Red][$S/]* -#,##0.00_-;[$S/]* "-"??_-;_-@_-');
     if ($valor["ventas"] != 0) {
         $total_ventas += $valor["ventas"];
     }
     $columna++;
     $hoja->setCellValue([$columna, $fila], $valor["gastos"] == 0 ? "No aplica" : $valor["gastos"]);
+    $hoja->getStyle([$columna, $fila])->getNumberFormat()->setFormatCode('[$S/]* #,##0.00_-;[Red][$S/]* -#,##0.00_-;[$S/]* "-"??_-;_-@_-');
     if ($valor["gastos"] != 0) {
         $total_gastos += $valor["gastos"];
     }
@@ -70,6 +73,7 @@ $utilidad = $total_ventas - $total_gastos;
 $hoja->setCellValue([$columna, $fila], "Caja chica");
 $columna++;
 $hoja->setCellValue([$columna, $fila], $total_caja_chica);
+$hoja->getStyle([$columna, $fila])->getNumberFormat()->setFormatCode('[$S/]* #,##0.00_-;[Red][$S/]* -#,##0.00_-;[$S/]* "-"??_-;_-@_-');
 $fila++;
 $columna = 1;
 
@@ -77,6 +81,7 @@ $columna = 1;
 $hoja->setCellValue([$columna, $fila], "Gastos");
 $columna++;
 $hoja->setCellValue([$columna, $fila], $total_gastos);
+$hoja->getStyle([$columna, $fila])->getNumberFormat()->setFormatCode('[$S/]* #,##0.00_-;[Red][$S/]* -#,##0.00_-;[$S/]* "-"??_-;_-@_-');
 $fila++;
 $columna = 1;
 
@@ -84,6 +89,7 @@ $columna = 1;
 $hoja->setCellValue([$columna, $fila], "Ventas");
 $columna++;
 $hoja->setCellValue([$columna, $fila], $total_ventas);
+$hoja->getStyle([$columna, $fila])->getNumberFormat()->setFormatCode('[$S/]* #,##0.00_-;[Red][$S/]* -#,##0.00_-;[$S/]* "-"??_-;_-@_-');
 $fila++;
 $columna = 1;
 
@@ -91,6 +97,7 @@ $columna = 1;
 $hoja->setCellValue([$columna, $fila], "Total en caja");
 $columna++;
 $hoja->setCellValue([$columna, $fila], $total);
+$hoja->getStyle([$columna, $fila])->getNumberFormat()->setFormatCode('[$S/]* #,##0.00_-;[Red][$S/]* -#,##0.00_-;[$S/]* "-"??_-;_-@_-');
 $fila++;
 $columna = 1;
 
@@ -98,6 +105,7 @@ $columna = 1;
 $hoja->setCellValue([$columna, $fila], "Utilidad");
 $columna++;
 $hoja->setCellValue([$columna, $fila], $utilidad);
+$hoja->getStyle([$columna, $fila])->getNumberFormat()->setFormatCode('[$S/]* #,##0.00_-;[Red][$S/]* -#,##0.00_-;[$S/]* "-"??_-;_-@_-');
 $fila++;
 $columna = 1;
 

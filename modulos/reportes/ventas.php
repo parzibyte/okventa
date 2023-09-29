@@ -42,6 +42,9 @@ foreach ($todas_las_ventas_por_familia as $valor) {
     $columna = 1;
     foreach ($propiedades as $propiedad) {
         $hoja->setCellValue([$columna, $fila], $valor[$propiedad]);
+        if (in_array($propiedad, ["total", "utilidad"])) {
+            $hoja->getStyle([$columna, $fila])->getNumberFormat()->setFormatCode('[$S/]* #,##0.00_-;[Red][$S/]* -#,##0.00_-;[$S/]* "-"??_-;_-@_-');
+        }
         if ($propiedad === "total") {
             $total_familias += $valor[$propiedad];
         }
@@ -56,8 +59,10 @@ $columna = 1;
 $hoja->setCellValue([$columna, $fila], "Totales");
 $columna++;
 $hoja->setCellValue([$columna, $fila], $total_familias);
+$hoja->getStyle([$columna, $fila])->getNumberFormat()->setFormatCode('[$S/]* #,##0.00_-;[Red][$S/]* -#,##0.00_-;[$S/]* "-"??_-;_-@_-');
 $columna++;
 $hoja->setCellValue([$columna, $fila], $total_utilidad_familias);
+$hoja->getStyle([$columna, $fila])->getNumberFormat()->setFormatCode('[$S/]* #,##0.00_-;[Red][$S/]* -#,##0.00_-;[$S/]* "-"??_-;_-@_-');
 
 
 
@@ -125,6 +130,9 @@ for ($x = 0; $x < count($ventas_agrupadas); $x++) {
             $hoja->setCellValue([$columna, $fila], $verdadero_valor);
         } else {
             $hoja->setCellValue([$columna, $fila], $verdadero_valor);
+            if (in_array($propiedad, ["total", "utilidad"])) {
+                $hoja->getStyle([$columna, $fila])->getNumberFormat()->setFormatCode('[$S/]* #,##0.00_-;[Red][$S/]* -#,##0.00_-;[$S/]* "-"??_-;_-@_-');
+            }
         }
         $columna++;
     }
@@ -134,11 +142,13 @@ $columna = 1;
 $hoja->setCellValue([$columna, $fila], "Total");
 $columna++;
 $hoja->setCellValue([$columna, $fila], $total_ventas_generales);
+$hoja->getStyle([$columna, $fila])->getNumberFormat()->setFormatCode('[$S/]* #,##0.00_-;[Red][$S/]* -#,##0.00_-;[$S/]* "-"??_-;_-@_-');
 $fila++;
 $columna = 1;
 $hoja->setCellValue([$columna, $fila], "Utilidad");
 $columna++;
 $hoja->setCellValue([$columna, $fila], $total_utilidad_general);
+$hoja->getStyle([$columna, $fila])->getNumberFormat()->setFormatCode('[$S/]* #,##0.00_-;[Red][$S/]* -#,##0.00_-;[$S/]* "-"??_-;_-@_-');
 $fila++;
 ob_clean();
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
