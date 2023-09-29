@@ -42,7 +42,7 @@ $(document)
     });
 
 
-function Producto(rowid, codigo, nombre, cantidad, precio, posicion, familia, precio_compra) {
+function Producto(rowid, codigo, nombre, cantidad, precio, posicion, familia, precio_compra, existencia) {
     this.rowid = rowid;
     this.codigo = codigo;
     this.nombre = nombre;
@@ -52,7 +52,8 @@ function Producto(rowid, codigo, nombre, cantidad, precio, posicion, familia, pr
     this.total = this.cantidad * this.precio_venta;
     this.familia = familia;
     this.precio_compra = parseFloat(precio_compra);
-    this.utilidad = (this.precio_venta - this.precio_compra >= 0 ? this.precio_venta - this.precio_compra : 0 );
+    this.utilidad = (this.precio_venta - this.precio_compra >= 0 ? this.precio_venta - this.precio_compra : 0);
+    this.existencia = existencia;
 };
 
 
@@ -115,15 +116,16 @@ function agrega_producto_local(producto) {
     if (ya_esta_en_la_lista !== true) {
         var _producto = new
             Producto(
-            producto.rowid,
-            producto.codigo,
-            producto.nombre,
-            1,
-            producto.precio_venta,
-            ayudante_posicion,
-            producto.familia,
-            producto.precio_compra
-        );
+                producto.rowid,
+                producto.codigo,
+                producto.nombre,
+                1,
+                producto.precio_venta,
+                ayudante_posicion,
+                producto.familia,
+                producto.precio_compra,
+                producto.existencia,
+            );
         productos_vender.push(_producto);
         ayudante_posicion++;
     }
@@ -202,6 +204,10 @@ function dibujar_productos() {
     var ayudante_total = 0;
     for (var i = productos_vender.length - 1; i >= 0; i--) {
         ayudante_total += productos_vender[i].total;
+        let parrafo = $("<p></p>");
+        if (productos_vender[i].cantidad > productos_vender[i].existencia) {
+            parrafo = $(`<p style="color:#dc2626;"><strong>Aviso: </strong> se está vendiendo más allá de la existencia (existen ${parseFloat(productos_vender[i].existencia).toFixed(2)} y se va a vender ${parseFloat(productos_vender[i].cantidad).toFixed(2)})</p>`);
+        }
         $("#contenedor_tabla tbody")
             .append(
                 $("<tr>")
@@ -226,6 +232,9 @@ function dibujar_productos() {
                                             .attr("data-pos", productos_vender[i].posicion)
                                             .addClass('form-control modificar-cantidad')
                                             .val(productos_vender[i].cantidad)
+                                    )
+                                    .append(
+                                        parrafo
                                     )
                             ),
 
@@ -490,15 +499,15 @@ function autocompletado_input() {
 
 
 function comprueba_si_existe_codigo(codigo) {
-    $.post('./modulos/ventas/comprueba_si_existe_codigo.php', {"codigo": codigo}, function (respuesta) {
+    $.post('./modulos/ventas/comprueba_si_existe_codigo.php', { "codigo": codigo }, function (respuesta) {
         $("#codigo_producto")
             .val("")
             .trigger(
                 jQuery.Event(
                     'keyup', {
-                        keyCode: 27,
-                        which: 27
-                    }
+                    keyCode: 27,
+                    which: 27
+                }
                 )
             )
             .focus();
