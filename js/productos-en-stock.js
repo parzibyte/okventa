@@ -31,6 +31,25 @@ function escuchar_elementos() {
     $("#familia").change(function () {
         consultar_todos_los_productos_en_stock($(this).val());
     });
+
+    $("#generar_reporte_excel").click(async function () {
+        const url = `./modulos/reportes/stock.php`;
+        const payload = {
+            familia: $("#familia").val(),
+        };
+        const respuesta = await fetch(url, {
+            method: "POST",
+            credentials: 'include',
+            body: JSON.stringify(payload),
+        });
+        const contenidoDelArchivo = await respuesta.blob();
+        const a = document.createElement("a");
+        const objectUrl = URL.createObjectURL(contenidoDelArchivo);
+        a.href = objectUrl;
+        a.download = "Reporte stock.xlsx";
+        a.click();
+        URL.revokeObjectURL(url);
+    });
 }
 function llenar_select(familias) {
     var $contenedorFamilia = $("#familia");

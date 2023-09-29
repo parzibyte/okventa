@@ -12,16 +12,20 @@ if (!isset($_SESSION)) exit("<script>window.location.href = '../';</script>");
 
         </select>
     </div>
+    <div class="form-group">
+        <button class="btn btn-info" id="generar_reporte_excel">Generar reporte Excel <i class="fa fa-file-excel-o"></i>
+        </button>
+    </div>
     <div class="table-responsive">
         <table class="table table-bordered table-condensed">
             <thead>
-            <tr>
-                <th>Código</th>
-                <th>Nombre</th>
-                <th>Existencia</th>
-                <th>Existencia permitida</th>
-                <th>Familia</th>
-            </tr>
+                <tr>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Existencia</th>
+                    <th>Existencia permitida</th>
+                    <th>Familia</th>
+                </tr>
             </thead>
             <tbody id="cuerpo_tabla">
 
