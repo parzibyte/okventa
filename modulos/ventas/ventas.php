@@ -61,11 +61,11 @@ function hacer_venta($productos, $total, $ticket, $cambio)
         $todo_correcto = $todo_correcto and $resultado_sentencia;
     }
     $todo_correcto = $todo_correcto and ingresar_dinero_venta_caja($total, $numero_venta);
-    if ($ticket === TRUE) {
-        include "../ticket.php";
-        imprime_ticket($productos, $numero_venta, $cambio);
+    if ($todo_correcto) {
+        return $numero_venta;
+    } else {
+        return false;
     }
-    return $todo_correcto;
 }
 
 function ingresar_dinero_venta_caja($total, $numero_venta)
@@ -112,5 +112,3 @@ function ultimo_numero_de_venta()
     if ($fila === FALSE) return 1;
     return $fila["ultima_venta"] + 1;
 }
-
-?>

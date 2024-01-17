@@ -274,6 +274,93 @@ function habilita_para_venta() {
     $("input, button").prop("disabled", false);
     puede_salir = true;
 }
+async function imprimirTicketUsandoPlugin(productos, total, cambio, ticket, idVenta) {
+    if (!ticket) {
+        return;
+    }
+    const serial = "";
+    let response = await fetch("./modulos/dame_datos_empresa.php")
+    const datosEmpresa = await response.json();
+    response = await fetch("./modulos/dame_logotipo.php")
+    const logotipo = await response.text();
+    response = await fetch("./modulos/dame_impresora.php")
+    const nombreImpresora = await response.json();
+    const operaciones = [
+        { nombre: "Iniciar", argumentos: [], },
+        { nombre: "EstablecerAlineacion", argumentos: [1], },
+        { nombre: "ImprimirImagenEnBase64", argumentos: [logotipo, 0, 384], },
+        { nombre: "Feed", argumentos: [1], },
+        { nombre: "Iniciar", argumentos: [], },
+        { nombre: "EstablecerAlineacion", argumentos: [1], },
+        { nombre: "Feed", argumentos: [2], }
+    ];
+    for (const dato of datosEmpresa) {
+        operaciones.push(
+            { nombre: "EscribirTexto", argumentos: [dato], }
+        );
+    }
+    operaciones.push(
+        { nombre: "EstablecerEnfatizado", argumentos: [true] },
+        { nombre: "EscribirTexto", argumentos: [`Venta #${idVenta}`] },
+        { nombre: "EstablecerEnfatizado", argumentos: [false] },
+        { nombre: "Feed", argumentos: [1] },
+        { nombre: "EstablecerAlineacion", argumentos: [0], },
+    );
+    const formateador = new Intl.NumberFormat("es-MX", { style: "currency", "currency": "MXN" });
+    for (const producto of productos) {
+        const importe = producto.cantidad * producto.precio_venta;
+        const formateado = formateador.format(importe);
+
+        operaciones.push(
+            { nombre: "EstablecerAlineacion", argumentos: [0] },
+            { nombre: "EscribirTexto", argumentos: [`${producto.cantidad}x${producto.nombre}\n`] },
+            { nombre: "EstablecerAlineacion", argumentos: [2] },
+            { nombre: "EscribirTexto", argumentos: [formateado + "\n"] },
+        );
+    }
+    let mensaje = "";
+    const hora = new Date().getHours();
+    if (hora >= 6 && hora <= 12) {
+        mensaje = "le deseamos un buen dia";
+    }
+    if (hora >= 12 && hora <= 19) {
+        mensaje = "le deseamos una buena tarde";
+    }
+    if (hora >= 19 && hora <= 24) {
+        mensaje = "le deseamos una buena noche";
+    }
+    if (hora >= 0 && hora <= 6) {
+        mensaje = "le deseamos un buen dia";
+    }
+    mensaje = mensaje.toUpperCase();
+    operaciones.push(
+        { nombre: "EstablecerEnfatizado", argumentos: [true] },
+        { nombre: "EscribirTexto", argumentos: [`--------\n`] },
+        { nombre: "EscribirTexto", argumentos: [`SU PAGO ${formateador.format(total + cambio)}\n`] },
+        { nombre: "EscribirTexto", argumentos: [`TOTAL ${formateador.format(total)}\n`] },
+        { nombre: "EscribirTexto", argumentos: [`CAMBIO ${formateador.format(cambio)}\n`] },
+        { nombre: "Feed", argumentos: [1] },
+        { nombre: "EstablecerAlineacion", argumentos: [1] },
+        { nombre: "EstablecerEnfatizado", argumentos: [false] },
+        { nombre: "EscribirTexto", argumentos: [mensaje] },
+        { nombre: "Feed", argumentos: [2] },
+        { nombre: "CorteParcial", argumentos: [] },
+        { nombre: "Pulso", argumentos: [48, 60, 120] },
+    );
+    const payload = {
+        nombreImpresora,
+        serial,
+        operaciones
+    };
+    response = await fetch("http://localhost:8000/imprimir", {
+        method: "POST",
+        body: JSON.stringify(payload),
+    });
+    const correctoAlImprimir = await response.json();
+    if (!correctoAlImprimir) {
+        alert("Error imprimiendo: " + correctoAlImprimir);
+    }
+}
 function realizar_venta(productos, total, cambio, ticket) {
     cambio = parseFloat(cambio);
     if (cambio < 0) cambio = 0;
@@ -299,7 +386,8 @@ function realizar_venta(productos, total, cambio, ticket) {
         habilita_para_venta();
         ayudante_posicion = 0;
         respuesta = JSON.parse(respuesta);
-        if (respuesta === true) {
+        if (respuesta) {
+            imprimirTicketUsandoPlugin(JSON.parse(productos), total, cambio, JSON.parse(ticket), respuesta)
             $("#realizar_venta")
                 .html(
                     $("<i>")
