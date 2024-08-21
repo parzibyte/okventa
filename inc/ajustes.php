@@ -4,6 +4,10 @@ if (!isset($_SESSION)) exit("<script>window.location.href = '../';</script>");
 <div class="row">
     <div class="col-xs-12">
         <h3 class="text-center">Impresora para tickets <i class="fa fa-print"></i></h3>
+        <div class="alert alert-info">
+            Consulta la guía para configurar tu impresora en el apartado <strong>Sobre la impresión de tickets</strong>
+            de: <a target="_blank" href="https://parzibyte.me/blog/2022/05/06/punto-venta-php-jquery-bootstrap-gratuito-open-source/">https://parzibyte.me/blog/2022/05/06/punto-venta-php-jquery-bootstrap-gratuito-open-source/</a>
+        </div>
         <h5><strong>Nombre de la impresora actualmente seleccionada:</strong> <span id="impresora_seleccionada"></span></h5>
         <div class="form-group">
             <label for="impresoras">
@@ -51,22 +55,22 @@ if (!isset($_SESSION)) exit("<script>window.location.href = '../';</script>");
         </div>
         <div class="form-group">
             <label for="nombre">Teléfono</label><input placeholder="Teléfono" type="tel" id="telefono"
-                                                       class="form-control">
+                class="form-control">
         </div>
         <div class="form-group">
             <label for="rfc">RFC</label><input placeholder="RFC" type="text" id="rfc" class="form-control">
         </div>
         <div class="form-group">
             <label for="direccion">Dirección</label><input placeholder="Dirección" type="text" id="direccion"
-                                                           class="form-control">
+                class="form-control">
         </div>
         <div class="form-group">
             <label for="colonia">Colonia</label><input placeholder="Colonia" type="text" id="colonia"
-                                                       class="form-control">
+                class="form-control">
         </div>
         <div class="form-group">
             <label for="cp">Código postal</label><input placeholder="Código postal" type="text" id="cp"
-                                                        class="form-control">
+                class="form-control">
         </div>
         <div class="form-group">
             <label for="cp">Ciudad</label><input placeholder="Ciudad" type="text" id="ciudad" class="form-control">
